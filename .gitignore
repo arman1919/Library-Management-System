@@ -1,0 +1,20 @@
+# Node.js files
+node_modules/
+npm-debug.log
+*.env
+
+# Dependency directories
+/lib-cov/
+/build/
+/coverage/
+/.nyc_output/
+*.code-workspace
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# MongoDB data directory
+/data/db/

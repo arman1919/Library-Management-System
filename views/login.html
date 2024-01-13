@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Login</h1>
+  <!-- Added a field for displaying error messages -->
+  <div id="error-message" style="color: red;"></div>
+  <form action="/login" method="POST">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <button type="submit">Login</button>
+    <div class="links">
+      <a href="/forgot-password">Forgot password</a>
+      <span class="separator"> | </span>
+      <a href="/registration">Registration</a>
+    </div>
+  </form>
+  <!-- Script for displaying error messages -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMessage = urlParams.get('error');
+    if (errorMessage) {
+      const errorDiv = document.getElementById('error-message');
+      errorDiv.textContent = errorMessage;
+    }
+  </script>
+</body>
+</html>

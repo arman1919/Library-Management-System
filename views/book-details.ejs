@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Details</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* Styles for the border */
+        .container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 600px; /* Container width */
+            margin: 20px auto; /* Centering on the page */
+        }
+
+        /* Styles for the Home button */
+        .home-button {
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: -15px -15px 15px -15px; /* Border around the button */
+            border-bottom: 1px solid #ccc;
+            border-radius: 10px 10px 0 0; /* Corner rounding for the border */
+            background-color: #f2f2f2;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Styles for book information */
+        .book-info {
+            background-color: #f2f2f2;
+            padding: 5px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/book/take/<%= book.isbn %>" method="POST">
+        <button type="submit">Take Book</button>
+    </form>
+
+    <div class="container"> <!-- Wrapper for the border -->
+        <a href="/index.html" class="home-button">Home</a> <!-- Adding the "Home" button -->
+        <h1><%= book.title %></h1>
+        <p class="book-info">Authors: <%= book.authors.join(', ') %></p>
+        <p class="book-info">ISBN: <%= book.isbn %></p>
+        <p class="book-info">Published Year: <%= book.published_year %></p>
+        <p class="book-info">Category: <%= book.category.join(', ') %></p>
+        <p class="book-info">Availability: <%= book.availability ? 'Available' : 'Not Available' %></p>
+        <p class="book-info">Location: Shelf <%= book.location.shelf %>, Row <%= book.location.row %></p>
+        <p class="book-info">Publisher: <%= book.additional_info.publisher %></p>
+        <p class="book-info">Language: <%= book.additional_info.language %></p>
+        <p class="book-info">Page Count: <%= book.additional_info.page_count %></p>
+        <img src="<%= book.cover_url %>" alt="Book Cover" width="200" height="300">
+        <a href="<%= book.online_version_url %>">Read Online</a>
+        <form action="/book/return/<%= book.isbn %>" method="POST">
+            <button class="return-button" type="submit">Return Book</button>
+        </form>
+    </div>
+</body>
+</html>
