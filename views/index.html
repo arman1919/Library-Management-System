@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Library Home Page</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/stylesheets/index-styles.css">
   </head>
   <body>
     <header>
@@ -12,7 +12,7 @@
       <nav>
         <ul>
           <li><a href="#">Home</a></li>
-          <li><a href="/my-books">Books</a></li>
+          <li><a href="/my-books">My Books</a></li>
           <li><a href="#">About</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
@@ -28,7 +28,8 @@
 
       <div id="pagination-buttons">
         <button id="prev-button" disabled>Previous</button>
-        <button id="next-button">Next</button>
+        <button id="next-button" disabled>Next</button>
+
       </div>
 
       <ul id="featured-books-list"></ul>
@@ -63,45 +64,53 @@
 
     // Loading books for the current page
     function loadBooks(page) {
-      fetch(`/books?page=${page}&limit=${booksPerPage}`)
-        .then(response => response.json())
-        .then(books => {
-          booksList.innerHTML = ''; // Clearing the list before adding new books
+        fetch(`/books?page=${page}&limit=${booksPerPage}`)
+            .then(response => response.json())
+            .then(books => {
+                booksList.innerHTML = ''; // Clearing the list before adding new books
 
-          books.forEach(book => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.textContent = book.title;
-    a.href = `/book?isbn=${book.isbn}`; // Use the request parameter for ISBN
+                books.forEach(book => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.textContent = book.title;
+                    a.href = `/book?isbn=${book.isbn}`; // Use the request parameter for ISBN
 
-    li.appendChild(a);
-    li.classList.add('book-item');
-    booksList.appendChild(li);
-  });
-        })
-        .catch(error => {
-          console.error('Error fetching books:', error);
-        });
+                    li.appendChild(a);
+                    li.classList.add('book-item');
+                    booksList.appendChild(li);
+                });
+
+                // Check if there are more books to load
+                if (books.length < booksPerPage) {
+                    nextButton.disabled = true; // Disable the "Next" button if no more books
+                } else {
+                    nextButton.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching books:', error);
+            });
     }
 
     // Handlers for the Next and Previous buttons
     nextButton.addEventListener('click', () => {
-      currentPage++;
-      loadBooks(currentPage);
-      prevButton.disabled = false;
+        currentPage++;
+        loadBooks(currentPage);
+        prevButton.disabled = false;
     });
 
     prevButton.addEventListener('click', () => {
-      currentPage--;
-      loadBooks(currentPage);
-      if (currentPage === 1) {
-        prevButton.disabled = true;
-      }
+        currentPage--;
+        loadBooks(currentPage);
+        if (currentPage === 1) {
+            prevButton.disabled = true;
+        }
     });
 
     // Loading the first page of books when loading the page
     loadBooks(currentPage);
-  });
+});
+
 
 
     

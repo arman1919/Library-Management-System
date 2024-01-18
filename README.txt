@@ -20,7 +20,7 @@ Follow the steps below to set up and run the application:
 4. Start the MongoDB server.
 5. Run the application using `npm start`.
 
-The application will be accessible at `http://localhost:3000`.
+The application will be accessible at `http://localhost:7777`.
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ The application will be accessible at `http://localhost:3000`.
    - Run the application using `npm start`.
 
 3. **Access the Application:**
-   - Open a web browser and go to `http://localhost:3000`.
+   - Open a web browser and go to `http://localhost:7777`.
 
 ## Usage
 

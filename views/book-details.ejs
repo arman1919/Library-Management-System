@@ -3,47 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Book Details</title>
-    <link rel="stylesheet" href="/styles.css">
-    <style>
-        /* Styles for the border */
-        .container {
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 600px; /* Container width */
-            margin: 20px auto; /* Centering on the page */
-        }
-
-        /* Styles for the Home button */
-        .home-button {
-            display: block;
-            text-decoration: none;
-            padding: 10px 15px;
-            margin: -15px -15px 15px -15px; /* Border around the button */
-            border-bottom: 1px solid #ccc;
-            border-radius: 10px 10px 0 0; /* Corner rounding for the border */
-            background-color: #f2f2f2;
-            color: #333;
-            font-weight: bold;
-        }
-
-        /* Styles for book information */
-        .book-info {
-            background-color: #f2f2f2;
-            padding: 5px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="/stylesheets/book_detals.css">      
 </head>
 <body>
 
     <form action="/book/take/<%= book.isbn %>" method="POST">
         <button type="submit">Take Book</button>
     </form>
-
-    <div class="container"> <!-- Wrapper for the border -->
-        <a href="/index.html" class="home-button">Home</a> <!-- Adding the "Home" button -->
+    <div id="availability-message" class="availability-message">
+        <% if (locals.message) { %>
+            <%= locals.message %>
+        <% } %>
+        
+    </div>
+    
+    <div class="container">
+        <a href="/index.html" class="home-button">Home</a>
         <h1><%= book.title %></h1>
         <p class="book-info">Authors: <%= book.authors.join(', ') %></p>
         <p class="book-info">ISBN: <%= book.isbn %></p>

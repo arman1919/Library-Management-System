@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -13,7 +14,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 7777;
 
 // Connecting to MongoDB using Mongoose
 mongoose.connect('mongodb+srv://arman75780:A75780.a@alms.v6rmr6w.mongodb.net/?retryWrites=true&w=majority')
@@ -217,13 +218,15 @@ app.post('/book/take/:isbn', async (req, res) => {
     // Check if the book is available and if it has already been taken by the user
     if (book.availability && !currentUser.takenBooks.includes(book._id)) {
       currentUser.takenBooks.push(book._id);
-      book.availability = false; // Updating the availability of the book to false
+      book.availability = false;
       await currentUser.save();
       await book.save();
-      return res.redirect('/index.html'); // After adding the book, we redirect to the main page
-    } else {
-      return res.status(400).send('Book is not available or already taken'); // If the book is unavailable or has already been taken by the user
-    }
+      return res.redirect('/index.html');
+  } else {
+      // If the book is not available or already taken, set the message
+      const message = 'The book is unavailable or has already been borrowed';
+      return res.render('book-details', { book, message });
+  }
   } catch (error) {
     console.error('Error taking book:', error);
     res.status(500).send('Error taking book');
@@ -232,32 +235,29 @@ app.post('/book/take/:isbn', async (req, res) => {
 
 
 app.post('/book/return/:isbn', async (req, res) => {
-  const isbn = req.params.isbn; // Getting the ISBN of the book from the request parameters
+  const isbn = req.params.isbn;
+
   try {
-    // Checking if the user is in the session (logged in)
     if (!req.session.user) {
-      return res.status(401).send('Unauthorized'); // If the user is not logged in, we send an error
+      return res.status(401).send('Unauthorized');
     }
 
-    // Getting information about the current user from the session
     const currentUserData = req.session.user;
-
-   // Re-getting the user from the database by _id from the session object
     const currentUser = await User.findById(currentUserData._id);
 
     if (!currentUser) {
       return res.status(404).send('User not found');
     }
 
-   // Finding a book by ISBN
     const book = await Book.findOne({ isbn });
 
     if (!book) {
       return res.status(404).send('Book not found');
     }
 
-   // Checking if the user has taken this book
+    // Checking if the user has taken this book
     const bookIndex = currentUser.takenBooks.indexOf(book._id);
+
     if (bookIndex !== -1) {
       // Deleting a book from the list of the user's taken books
       currentUser.takenBooks.splice(bookIndex, 1);
@@ -266,7 +266,9 @@ app.post('/book/return/:isbn', async (req, res) => {
       await book.save();
       return res.redirect('/index.html'); // After returning the book, we redirect to the main page
     } else {
-      return res.status(400).send('Book not taken by the user'); // If the book was not taken by the user
+      // If the book was not taken by the user
+      const message = 'Did you not take this book or is it already in the library';
+      return res.render('book-details', { book, message });
     }
   } catch (error) {
     console.error('Error returning book:', error);
