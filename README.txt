@@ -1,3 +1,5 @@
+The site works by following the link http://34.168.143.31:7777/
+
 # Library Management System
 
 This is a simple library management system built using Node.js, Express, and MongoDB. The application allows users to register, log in, browse available books, take books, return books, and view their own list of taken books.
